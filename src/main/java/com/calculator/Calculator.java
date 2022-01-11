@@ -1,9 +1,13 @@
 package com.calculator;
 
+import com.calculator.exception.DivideByZeroException;
+
 public class Calculator {
 
-    public double divide(int a, int b) {
-        int checkOut = b / b;
+    public double divide(int a, int b) throws DivideByZeroException {
+        if (b == 0) {
+            throw new DivideByZeroException();
+        }
         return 1.0 * a / b;
     }
 
