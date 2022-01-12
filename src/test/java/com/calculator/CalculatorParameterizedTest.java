@@ -1,14 +1,17 @@
 package com.calculator;
 
 import com.calculator.exception.DivideByZeroException;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
 
 import java.util.Arrays;
 import java.util.Collection;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 @RunWith(Enclosed.class)
 public class CalculatorParameterizedTest {
@@ -39,16 +42,15 @@ public class CalculatorParameterizedTest {
         }
 
         @Test
-        public void divide() throws DivideByZeroException {
-            Assert.assertEquals(expected, calculator.divide(first, second), 0.01);
+        public void divide() {
+            assertEquals(expected, calculator.divide(first, second), 0.01);
         }
 
-        @org.junit.Test(expected = DivideByZeroException.class)
-        public void testDivideByZero() throws DivideByZeroException {
-            Calculator calculator = new Calculator();
-            calculator.divide(3, 0);
+        @Test
+        public void divideThrowsDivideByZeroException() {
+            DivideByZeroException e = assertThrows(DivideByZeroException.class, () -> calculator.divide(4, 0));
+            assertEquals("division by zero", e.getMessage());
         }
-
     }
 
     @RunWith(Parameterized.class)
@@ -79,12 +81,21 @@ public class CalculatorParameterizedTest {
 
         @Test
         public void multiply() {
-            Assert.assertEquals(expected, calculator.multiply(first, second));
+            assertEquals(expected, calculator.multiply(first, second));
         }
     }
 
     @RunWith(Parameterized.class)
     public static class SubtractTest {
+
+        @Parameter()
+        public int first;
+
+        @Parameter(value = 1)
+        public int second;
+
+        @Parameter(value = 2)
+        public int expected;
 
         @Parameterized.Parameters
         public static Collection<Object[]> data() {
@@ -97,26 +108,24 @@ public class CalculatorParameterizedTest {
             });
         }
 
-        private final Calculator calculator;
-        private final int first;
-        private final int second;
-        private final int expected;
-
-        public SubtractTest(int first, int second, int expected) {
-            this.calculator = new Calculator();
-            this.first = first;
-            this.second = second;
-            this.expected = expected;
-        }
-
         @Test
         public void subtract() {
-            Assert.assertEquals(expected, calculator.subtract(first, second));
+            Calculator calculator = new Calculator();
+            assertEquals(expected, calculator.subtract(first, second));
         }
     }
 
     @RunWith(Parameterized.class)
     public static class SumTest {
+
+        @Parameter()
+        public int first;
+
+        @Parameter(value = 1)
+        public int second;
+
+        @Parameter(value = 2)
+        public int expected;
 
         @Parameterized.Parameters
         public static Collection<Object[]> data() {
@@ -129,21 +138,10 @@ public class CalculatorParameterizedTest {
             });
         }
 
-        private final Calculator calculator;
-        private final int first;
-        private final int second;
-        private final int expected;
-
-        public SumTest(int first, int second, int expected) {
-            this.calculator = new Calculator();
-            this.first = first;
-            this.second = second;
-            this.expected = expected;
-        }
-
         @Test
         public void sum() {
-            Assert.assertEquals(expected, calculator.sum(first, second));
+            Calculator calculator = new Calculator();
+            assertEquals(expected, calculator.sum(first, second));
         }
     }
 }

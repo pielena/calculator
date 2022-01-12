@@ -4,9 +4,9 @@ import com.calculator.exception.DivideByZeroException;
 
 public class Calculator {
 
-    public double divide(int a, int b) throws DivideByZeroException {
+    public double divide(int a, int b) {
         if (b == 0) {
-            throw new DivideByZeroException();
+            throw new DivideByZeroException("division by zero");
         }
         return 1.0 * a / b;
     }
